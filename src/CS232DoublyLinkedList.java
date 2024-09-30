@@ -1,4 +1,3 @@
-package hw03;
 
 /**
  * Doubly linked list implementation of the CS232List interface.

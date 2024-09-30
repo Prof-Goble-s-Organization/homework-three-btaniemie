@@ -1,4 +1,3 @@
-package hw03;
 
 import java.util.NoSuchElementException;
 

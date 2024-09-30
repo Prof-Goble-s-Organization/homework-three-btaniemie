@@ -1,4 +1,4 @@
-package hw03;
+
 
 /**
  * An implementation of the CS132List interface backed with an array of Objects.
