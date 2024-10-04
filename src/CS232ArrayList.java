@@ -1,4 +1,4 @@
-
+import java.util.NoSuchElementException;
 
 /**
  * An implementation of the CS132List interface backed with an array of Objects.
@@ -145,9 +145,56 @@ public class CS232ArrayList<E> implements CS232Iterable<E> {
         }
     }
 
-    @Override
+    /**
+	 * {@inheritDoc}
+	 */
     public CS232Iterator<E> getIterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getIterator'");
+        return new ArrayListIterator();
     }
+
+    private class ArrayListIterator implements CS232Iterator<E> {
+        private int cursor;
+
+        public ArrayListIterator() {
+            cursor = 0;
+        }
+
+        public boolean hasNext() {
+            return cursor < currentSize;
+        }
+
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("There is no next element.");
+            }
+            E element = get(cursor);  
+            cursor = cursor + 1;      
+            return element;     
+        }
+
+        public boolean hasPrevious() {
+            return cursor > 0;
+        }
+
+        @Override
+        public E previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException("No previous element to return.");
+            }
+            cursor = cursor - 1;  
+            return get(cursor);    
+        }
+
+        @Override
+        public void insert(E e) {
+            throw new UnsupportedOperationException("No need to implement insert");
+        }
+
+        @Override
+        public E remove() {
+            throw new UnsupportedOperationException("No need to implement remove");
+        }
+
+    }
+
 }
