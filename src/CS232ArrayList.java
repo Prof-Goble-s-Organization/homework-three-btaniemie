@@ -7,7 +7,7 @@
  * @author Dickinson College
  * @version Feb 18, 2016
  */
-public class CS232ArrayList<E> implements CS232List<E> {
+public class CS232ArrayList<E> implements CS232Iterable<E> {
 
     private static final int INITIAL_CAPACITY = 10;
 
@@ -143,5 +143,11 @@ public class CS232ArrayList<E> implements CS232List<E> {
 
             return elem;
         }
+    }
+
+    @Override
+    public CS232Iterator<E> getIterator() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getIterator'");
     }
 }

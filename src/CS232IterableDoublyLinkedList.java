@@ -175,13 +175,16 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		}
 
 		public boolean hasPrevious() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			return cursor.prev != head;
 		}
 
 		public E previous() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if (!hasPrevious()) {
+				throw new NoSuchElementException("There is no previous element.");
+			} else {
+				cursor = cursor.prev;
+				return cursor.element;
+			}
 		}
 
 		public void insert(E element) {
