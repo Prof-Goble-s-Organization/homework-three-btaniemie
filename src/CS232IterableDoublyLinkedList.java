@@ -159,10 +159,13 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	private class DLLIterator implements CS232Iterator<E> {
 
 		private DLLNode cursor;
-		private boolean nextOrPrevious = false;
+		private DLLNode lastCall;
+		private boolean hasNextOrPrev;
 
 		public DLLIterator() {
 			cursor = head;
+			lastCall = null;
+			hasNextOrPrev = false;
 		}
 
 		public boolean hasNext() {
@@ -174,7 +177,8 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 				throw new NoSuchElementException("There is no next element.");
 			} else {
 				cursor = cursor.next;
-				nextOrPrevious = true;
+				lastCall = cursor;
+				hasNextOrPrev = true;
 				return cursor.element;
 			}
 		}
@@ -188,7 +192,8 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 				throw new NoSuchElementException("There is no previous element.");
 			} else {
 				cursor = cursor.prev;
-				nextOrPrevious = true;
+				lastCall = cursor;
+				hasNextOrPrev = true;
 				return cursor.element;
 			}
 		}
@@ -202,18 +207,20 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		}
 
 		public E remove() {
-			if (!nextOrPrevious) {
+			if (!hasNextOrPrev) {
 				throw new IllegalStateException("Next or previous have not been called since the last call to remove.");
 			}
 
-			nextOrPrevious = false;
-			DLLNode node = cursor;
-			cursor.prev.next = cursor.next;
-			cursor.next.prev = cursor.prev;
-			cursor = cursor.prev;
+			DLLNode removed = lastCall;
+
+			lastCall.prev.next = lastCall.next;
+			lastCall.next.prev = lastCall.prev;
 			size--;
 
-			return node.element;
+			lastCall = null;
+			hasNextOrPrev = false;
+
+			return removed.element;
 		}
 	}
 	
