@@ -118,8 +118,12 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	 * {@inheritDoc}
 	 */
 	public E remove(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented... see HW assignment!
-		return null;
+		DLLNode node = getNode(index);
+		node.prev.next = node.next;
+		node.next.prev = node.prev;
+		size--;
+
+		return node.element;
 	}
 
 	/*
@@ -155,6 +159,7 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	private class DLLIterator implements CS232Iterator<E> {
 
 		private DLLNode cursor;
+		private boolean nextOrPrevious = false;
 
 		public DLLIterator() {
 			cursor = head;
@@ -169,6 +174,7 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 				throw new NoSuchElementException("There is no next element.");
 			} else {
 				cursor = cursor.next;
+				nextOrPrevious = true;
 				return cursor.element;
 			}
 		}
@@ -182,6 +188,7 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 				throw new NoSuchElementException("There is no previous element.");
 			} else {
 				cursor = cursor.prev;
+				nextOrPrevious = true;
 				return cursor.element;
 			}
 		}
@@ -195,8 +202,18 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		}
 
 		public E remove() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if (!nextOrPrevious) {
+				throw new IllegalStateException("Next or previous have not been called since the last call to remove.");
+			}
+
+			nextOrPrevious = false;
+			DLLNode node = cursor;
+			cursor.prev.next = cursor.next;
+			cursor.next.prev = cursor.prev;
+			cursor = cursor.prev;
+			size--;
+
+			return node.element;
 		}
 	}
 	
