@@ -1,4 +1,3 @@
-package hw03;
 
 import static org.junit.Assert.*;
 
@@ -18,7 +17,7 @@ public class No7Tests {
 	@Before
     public void setUp() throws Exception {
         myList = new CS232ArrayList<String>();
-        it = myList.getIterator();
+        it = myList.getIterator(); 
     }
     
     private void buildList() {

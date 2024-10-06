@@ -1,5 +1,3 @@
-package hw03;
-
 import java.util.NoSuchElementException;
 
 /**
@@ -120,8 +118,12 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	 * {@inheritDoc}
 	 */
 	public E remove(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented... see HW assignment!
-		return null;
+		DLLNode node = getNode(index);
+		node.prev.next = node.next;
+		node.next.prev = node.prev;
+		size--;
+
+		return node.element;
 	}
 
 	/*
@@ -157,6 +159,9 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	private class DLLIterator implements CS232Iterator<E> {
 
 		private DLLNode cursor;
+		private boolean callNextOrPrev = false;
+		private boolean callNext = false;
+
 
 		public DLLIterator() {
 			cursor = head;
@@ -171,18 +176,25 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 				throw new NoSuchElementException("There is no next element.");
 			} else {
 				cursor = cursor.next;
+				callNextOrPrev = true;
+				callNext = true;
 				return cursor.element;
 			}
 		}
 
 		public boolean hasPrevious() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			return cursor != head;
 		}
 
 		public E previous() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if (!hasPrevious()) {
+				throw new NoSuchElementException("There is no previous element.");
+			} else {
+				cursor = cursor.prev;
+				callNextOrPrev = true;
+				callNext = false;
+				return cursor.next.element;
+			}
 		}
 
 		public void insert(E element) {
@@ -194,8 +206,27 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		}
 
 		public E remove() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if (!callNextOrPrev) {
+				throw new IllegalStateException("Next or previous have not been called since the last call to remove.");
+			}
+
+			size--;
+			callNextOrPrev = false;
+			DLLNode removed;
+
+			if (callNext) {
+				removed = cursor;
+			} else {
+				removed = cursor.next;
+			}
+			
+			removed.prev.next = removed.next;
+			removed.next.prev = removed.prev;
+			
+			if (callNext) 
+				cursor = cursor.prev;
+
+			return removed.element;
 		}
 	}
 	
